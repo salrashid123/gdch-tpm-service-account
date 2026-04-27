@@ -1,0 +1,13 @@
+{
+  "type": "gdch_service_account",
+  "format_version": "1",
+  "project": "project_name",
+  "private_key_id": "abcdef1234567890",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg0k2NHqeBtmYnTK/a\nbhiUbMHPsoEC6UK3Jx23Pz4rpdShRANCAARSFcrRgGus8in7BQFZ1tqGgw60z1Ko\n16IBndMUzLDPikNiz61+k70umAeiD1vIWf3OmaSWzHq0e4emwMZiqRzg\n-----END PRIVATE KEY-----\n",
+  "name": "sa_name",
+  "ca_cert_path": "/path/to/root-ca.crt",
+  "token_uri": "https://service-identity.<Domain>/authenticate",
+  "universe_domain": "googleapis.com"
+}
+
+

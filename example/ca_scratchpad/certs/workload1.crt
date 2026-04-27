@@ -1,0 +1,63 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 3 (0x3)
+        Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Google, OU=Enterprise, CN=Single Root CA
+        Validity
+            Not Before: Apr 24 18:29:03 2026 GMT
+            Not After : Apr 23 18:29:03 2036 GMT
+        Subject: L=US, O=Google, OU=Enterprise, CN=workload1.domain.com
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub:
+                    04:52:15:ca:d1:80:6b:ac:f2:29:fb:05:01:59:d6:
+                    da:86:83:0e:b4:cf:52:a8:d7:a2:01:9d:d3:14:cc:
+                    b0:cf:8a:43:62:cf:ad:7e:93:bd:2e:98:07:a2:0f:
+                    5b:c8:59:fd:ce:99:a4:96:cc:7a:b4:7b:87:a6:c0:
+                    c6:62:a9:1c:e0
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Subject Key Identifier: 
+                FD:6B:98:3B:56:35:70:B5:1F:59:83:4D:7E:8B:0D:85:B7:C3:6F:89
+            X509v3 Authority Key Identifier: 
+                3F:C1:6A:DF:1A:52:48:C1:41:D6:30:3A:C1:63:FA:1C:FF:0F:88:5D
+            Authority Information Access: 
+                CA Issuers - URI:http://pki.esodemoapp2.com/ca/root-ca.cer
+            X509v3 CRL Distribution Points: 
+                Full Name:
+                  URI:http://pki.esodemoapp2.com/ca/root-ca.crl
+
+            X509v3 Subject Alternative Name: 
+                DNS:workload1.domain.com
+    Signature Algorithm: ecdsa-with-SHA256
+    Signature Value:
+        30:44:02:20:7f:bd:a1:0e:9a:46:6f:49:0a:72:6a:41:e6:12:
+        44:5b:e6:23:fd:90:ff:75:e0:b8:c5:81:92:f9:b4:dc:1c:80:
+        02:20:3c:d9:df:a3:3e:50:8d:bd:ad:32:c3:74:ef:ec:c9:0a:
+        f7:19:92:83:bc:92:74:79:ac:67:10:d3:b7:5f:f7:94
+-----BEGIN CERTIFICATE-----
+MIICpjCCAk2gAwIBAgIBAzAKBggqhkjOPQQDAjBMMQswCQYDVQQGEwJVUzEPMA0G
+A1UECgwGR29vZ2xlMRMwEQYDVQQLDApFbnRlcnByaXNlMRcwFQYDVQQDDA5TaW5n
+bGUgUm9vdCBDQTAeFw0yNjA0MjQxODI5MDNaFw0zNjA0MjMxODI5MDNaMFIxCzAJ
+BgNVBAcMAlVTMQ8wDQYDVQQKDAZHb29nbGUxEzARBgNVBAsMCkVudGVycHJpc2Ux
+HTAbBgNVBAMMFHdvcmtsb2FkMS5kb21haW4uY29tMFkwEwYHKoZIzj0CAQYIKoZI
+zj0DAQcDQgAEUhXK0YBrrPIp+wUBWdbahoMOtM9SqNeiAZ3TFMywz4pDYs+tfpO9
+LpgHog9byFn9zpmklsx6tHuHpsDGYqkc4KOCARgwggEUMA4GA1UdDwEB/wQEAwIH
+gDAJBgNVHRMEAjAAMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB0GA1UdDgQWBBT9a5g7
+VjVwtR9Zg01+iw2Ft8NviTAfBgNVHSMEGDAWgBQ/wWrfGlJIwUHWMDrBY/oc/w+I
+XTBFBggrBgEFBQcBAQQ5MDcwNQYIKwYBBQUHMAKGKWh0dHA6Ly9wa2kuZXNvZGVt
+b2FwcDIuY29tL2NhL3Jvb3QtY2EuY2VyMDoGA1UdHwQzMDEwL6AtoCuGKWh0dHA6
+Ly9wa2kuZXNvZGVtb2FwcDIuY29tL2NhL3Jvb3QtY2EuY3JsMB8GA1UdEQQYMBaC
+FHdvcmtsb2FkMS5kb21haW4uY29tMAoGCCqGSM49BAMCA0cAMEQCIH+9oQ6aRm9J
+CnJqQeYSRFvmI/2Q/3XguMWBkvm03ByAAiA82d+jPlCNva0yw3Tv7MkK9xmSg7yS
+dHmsZxDTt1/3lA==
+-----END CERTIFICATE-----

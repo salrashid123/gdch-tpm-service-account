@@ -1,0 +1,49 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Google, OU=Enterprise, CN=Single Root CA
+        Validity
+            Not Before: Apr 24 18:26:28 2026 GMT
+            Not After : Apr 23 18:26:28 2036 GMT
+        Subject: C=US, O=Google, OU=Enterprise, CN=Single Root CA
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub:
+                    04:8d:b6:82:52:54:d9:50:ee:ba:6b:91:a3:1a:a8:
+                    4d:ed:a7:54:91:1d:3d:cb:20:0e:1a:90:f1:96:37:
+                    ec:cf:5c:cd:08:55:a5:94:bc:e9:8a:35:46:77:93:
+                    c0:04:62:de:78:76:e3:db:6f:10:74:df:27:19:3e:
+                    81:35:34:26:1a
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                3F:C1:6A:DF:1A:52:48:C1:41:D6:30:3A:C1:63:FA:1C:FF:0F:88:5D
+            X509v3 Authority Key Identifier: 
+                3F:C1:6A:DF:1A:52:48:C1:41:D6:30:3A:C1:63:FA:1C:FF:0F:88:5D
+    Signature Algorithm: ecdsa-with-SHA256
+    Signature Value:
+        30:45:02:21:00:ad:e6:c4:6c:67:e8:2a:3e:ce:bf:0c:14:9d:
+        ad:74:8e:fa:3f:05:16:e9:a9:67:ef:89:7d:a5:c1:02:b2:71:
+        f0:02:20:6b:66:c6:9f:3c:50:e5:2e:6e:f4:6f:46:ec:19:71:
+        f5:f7:51:4e:1f:16:0d:35:c3:19:06:81:4d:2d:48:7e:25
+-----BEGIN CERTIFICATE-----
+MIIB6jCCAZCgAwIBAgIBATAKBggqhkjOPQQDAjBMMQswCQYDVQQGEwJVUzEPMA0G
+A1UECgwGR29vZ2xlMRMwEQYDVQQLDApFbnRlcnByaXNlMRcwFQYDVQQDDA5TaW5n
+bGUgUm9vdCBDQTAeFw0yNjA0MjQxODI2MjhaFw0zNjA0MjMxODI2MjhaMEwxCzAJ
+BgNVBAYTAlVTMQ8wDQYDVQQKDAZHb29nbGUxEzARBgNVBAsMCkVudGVycHJpc2Ux
+FzAVBgNVBAMMDlNpbmdsZSBSb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcD
+QgAEjbaCUlTZUO66a5GjGqhN7adUkR09yyAOGpDxljfsz1zNCFWllLzpijVGd5PA
+BGLeeHbj228QdN8nGT6BNTQmGqNjMGEwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB
+/wQFMAMBAf8wHQYDVR0OBBYEFD/Bat8aUkjBQdYwOsFj+hz/D4hdMB8GA1UdIwQY
+MBaAFD/Bat8aUkjBQdYwOsFj+hz/D4hdMAoGCCqGSM49BAMCA0gAMEUCIQCt5sRs
+Z+gqPs6/DBSdrXSO+j8FFumpZ++JfaXBArJx8AIga2bGnzxQ5S5u9G9G7Blx9fdR
+Th8WDTXDGQaBTS1IfiU=
+-----END CERTIFICATE-----
