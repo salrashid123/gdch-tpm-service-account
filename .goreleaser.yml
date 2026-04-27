@@ -1,14 +1,14 @@
-project_name: gdch-service-account
+project_name: gdch-tpm-service-account
 version: 2
 release:
   draft: true
   github:
     owner: salrashid123
-    name: gdch-service-account
+    name: gdch-tpm-service-account
   name_template: '{{.Tag}}'
   extra_files:
 builds:
-  - id: gdch-service-account
+  - id: gdch-tpm-service-account
     main: ./cmd  
     goos:
       - linux
@@ -22,7 +22,7 @@ builds:
       - 7
     env:
       - CGO_ENABLED=0
-    binary: gdch-service-account
+    binary: gdch-tpm-service-account
     builder: go
     tool: go
     command: build

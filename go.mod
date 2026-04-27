@@ -1,4 +1,4 @@
-module github.com/salrashid123/gdch-service-account
+module github.com/salrashid123/gdch-tpm-service-account
 
 go 1.26.2
 

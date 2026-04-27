@@ -11,7 +11,7 @@ import (
 	"slices"
 
 	"github.com/google/go-tpm/tpmutil"
-	gdchtpm "github.com/salrashid123/gdch-service-account"
+	gdchtpm "github.com/salrashid123/gdch-tpm-service-account"
 )
 
 const (

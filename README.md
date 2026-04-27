@@ -136,7 +136,7 @@ ODT8jpZZxmF74nuB5soHrcEfBAKaPCmLHv1zMAoHVfGqgYQ2gr8=
 so to get an access_token
 
 ```bash
-gdch-service-account  \
+gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
     --stsServerName=service-identity.<Domain> \
     --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
@@ -178,7 +178,7 @@ tpmcopy --mode import --parentKeyType=rsa_ek --in=out.json --out=tpmkey.pem --tp
 Now run the cli but remember to specify `-useEKParent=rsa_ek`
 
 ```bash
-gdch-service-account \
+gdch-tpm-service-account \
     --keyfilepath=example/certs_duplicate/tpmkey.pem \
     --stsServerName=service-identity.<Domain> \
     --svcAccountName=$SERVCIE_NAME -keyID=$KEYID \
@@ -208,7 +208,7 @@ tpm2_encodeobject -C primary.ctx -u key.pub -r key.priv -o workload1_tpm_key.pem
 now specify the passphrase when using the cli
 
 ```bash
-gdch-service-account  \
+gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
     --stsServerName=service-identity.<Domain> \
     --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
@@ -247,7 +247,7 @@ tpm2_encodeobject -C primary.ctx -u key.pub -r key.priv -o workload1_tpm_key.pem
 After this, you will need to spcify the PCRs to check against while getting the keys
 
 ```bash
-gdch-service-account  \
+gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
     --stsServerName=service-identity.<Domain> \
     --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
