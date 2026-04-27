@@ -355,6 +355,11 @@ for example
 cd example/
 swtpm socket --tpmstate dir=myvtpm --tpm2 --server type=tcp,port=2321 --ctrl type=tcp,port=2322 --flags not-need-init,startup-clear --log level=2
 
+
+export TPM2TOOLS_TCTI="swtpm:port=2321"
+tpm2_flushcontext -t && tpm2_flushcontext -s && tpm2_flushcontext -l
+
+
 go run cmd/main.go   \
    --keyfilepath=example/certs_import/workload1_tpm_key.pem  \
       --stsServerName=stsgcdh-995081019036.us-central1.run.app   \
