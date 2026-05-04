@@ -42,6 +42,7 @@ You can set the following options on usage:
 |:------------|-------------|
 | **`--tpm-path`** | path to the TPM device (required default: `/dev/tpm0`) |
 | **`--tokenURI`** | address of the STS Server (required default: ``) |
+| **`--caCertificate`** | path to the PEM ca certificate for the tokenURI (required default: ``) |
 | **`--svcAccountName`** | name of the service account to request a token for (required default: ``) |
 | **`--projectID`** | project id for the service account (required default: ``) |
 | **`--stsServerName`** | SNI for the STS Server (required default: ``) |
