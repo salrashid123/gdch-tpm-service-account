@@ -101,7 +101,12 @@ swtpm socket --tpmstate dir=/tmp/myvtpm --tpm2 --server type=tcp,port=2321 --ctr
 
 ### Import Key
 
-To import the key directly into the TPM
+To import the key directly into the TPM.  YYou can either use `tpm2_tools` or download the binary from this repo:
+
+* [tpm2genkey](https://github.com/salrashid123/tpm2genkey/tree/main#import-ecc)
+
+
+with `tpm2_tools`:
 
 ```bash
 export TPM2TOOLS_TCTI="swtpm:port=2321"
