@@ -1,13 +1,9 @@
 {
   "type": "gdch_service_account",
   "format_version": "1",
-  "project": "project_name",
-  "private_key_id": "abcdef1234567890",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg0k2NHqeBtmYnTK/a\nbhiUbMHPsoEC6UK3Jx23Pz4rpdShRANCAARSFcrRgGus8in7BQFZ1tqGgw60z1Ko\n16IBndMUzLDPikNiz61+k70umAeiD1vIWf3OmaSWzHq0e4emwMZiqRzg\n-----END PRIVATE KEY-----\n",
-  "name": "sa_name",
-  "ca_cert_path": "/path/to/root-ca.crt",
-  "token_uri": "https://service-identity.<Domain>/authenticate",
-  "universe_domain": "googleapis.com"
+  "project": "test2026",
+  "private_key_id": "f1f360ef-dc96-4048-87a5-b063ef4f7da0",
+  "private_key": "-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIM4Rua3MdrnpHrledtMXj87zK+pUF+uusOyUSqcmxISXoAoGCCqGSM49\nAwEHoUQDQgAENgcOPYbu+Ba+aXh4C1X43CShCPdg88rKWnlQfr8AFZpxXIxCQhrA\n/5cDofZz5v2uYJgb9b6XOEtmkn6Uwryx6w==\n-----END EC PRIVATE KEY-----\n",
+  "name": "sa-test2026",
+  "token_uri": "https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate"
 }
-
-

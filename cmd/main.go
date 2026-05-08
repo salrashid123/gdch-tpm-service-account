@@ -36,6 +36,7 @@ var (
 	svcAccountName = flag.String("svcAccountName", "", "Service Account Name")
 	projectID      = flag.String("projectID", "", "Project ID (default: )")
 	tokenURI       = flag.String("tokenURI", "", "STSServer URI (default: )")
+	stsAudience    = flag.String("stsAudience", "", "Audience for the STS request")
 
 	rawOutput = flag.Bool("rawOutput", false, "return just the token, nothing else")
 
@@ -124,6 +125,7 @@ func run() int {
 		ProjectID:          *projectID,
 		TokenURI:           *tokenURI,
 		KeyID:              *keyID,
+		STSAudience:        *stsAudience,
 
 		SessionEncryptionName: *sessionEncryptionName,
 		Parentpass:            parentPasswordAuth,

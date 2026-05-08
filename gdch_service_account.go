@@ -65,10 +65,10 @@ type GDCHTPMConfig struct {
 	ServiceAccountName string
 	ProjectID          string
 	TokenURI           string
+	STSAudience        string
 	KeyID              string
 
 	UseEKParent         ParentKeyType // set true if the parent is rsa_ek or ecc_ek
-	Audience            string        // audience for the id_token
 	ServiceAccountEmail string        // name of the service account
 
 	SessionEncryptionName string // hex string "name" of the rsa_ek to use for session encryption
@@ -98,6 +98,10 @@ func (d ParentKeyType) String() string {
 }
 
 func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
+
+	if cfg.STSAudience == "" || cfg.TokenURI == "" || cfg.KeyID == "" {
+		return &Token{}, fmt.Errorf("gdch-tpm-credential: stsAudience, tokenURI, keyID and keyfile are all required")
+	}
 
 	rwr := transport.FromReadWriter(cfg.TPMCloser)
 
@@ -439,7 +443,7 @@ func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
 			}),
 			SubjectTokenType:   "urn:k8s:params:oauth:token-type:serviceaccount",
 			RequestedTokenType: "urn:ietf:params:oauth:token-type:access_token",
-			Audience:           "https://management-kube.apiserver.org-1.zone1.google.gdch.test", //cfg.TokenURI,
+			Audience:           cfg.STSAudience,
 			HTTPClient:         stsClient,
 			PostJSON:           true,
 		},

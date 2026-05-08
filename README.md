@@ -42,6 +42,7 @@ You can set the following options on usage:
 |:------------|-------------|
 | **`--tpm-path`** | path to the TPM device (required default: `/dev/tpm0`) |
 | **`--tokenURI`** | address of the STS Server (required default: ``) |
+| **`--stsAudience`** | audience to set within the STS token request (required default: ``) |
 | **`--caCertificate`** | path to the PEM ca certificate for the tokenURI (required default: ``) |
 | **`--svcAccountName`** | name of the service account to request a token for (required default: ``) |
 | **`--projectID`** | project id for the service account (required default: ``) |
@@ -71,23 +72,47 @@ gdcloud iam service-accounts create svc_account_1 --project=project_name
 
 gdcloud iam service-accounts keys create adc_file.json \
    --project=PROJECT --iam-account=NAME --ca-cert-path=CA_CERTIFICATE_PATH
+```
 
+your `adc_file.json` may look  like
+
+```json
+{
+  "type": "gdch_service_account",
+  "format_version": "1",
+  "project": "test2026",
+  "private_key_id": "f1f360ef-dc96-4048-87a5-b063ef4f7da0",
+  "private_key": "-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEINJNjR6ngbZmJ0yv2m4YlGzBz7KBAulCtycdtz8+K6XUoAoGCCqGSM49\nAwEHoUQDQgAEUhXK0YBrrPIp+wUBWdbahoMOtM9SqNeiAZ3TFMywz4pDYs+tfpO9\nLpgHog9byFn9zpmklsx6tHuHpsDGYqkc4A==\n-----END EC PRIVATE KEY-----\n",
+  "name": "sa-test2026",
+  "token_uri": "https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate"
+}
+```
+
+So extract the keys to import
+
+```bash
 cat adc_file.json | jq -r '.private_key' > private_key.pem
 
 openssl ec -in private_key.pem -pubout -out public_key.pem
 
 cat private_key.pem 
------BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg0k2NHqeBtmYnTK/a
-bhiUbMHPsoEC6UK3Jx23Pz4rpdShRANCAARSFcrRgGus8in7BQFZ1tqGgw60z1Ko
-16IBndMUzLDPikNiz61+k70umAeiD1vIWf3OmaSWzHq0e4emwMZiqRzg
------END PRIVATE KEY-----
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEINJNjR6ngbZmJ0yv2m4YlGzBz7KBAulCtycdtz8+K6XUoAoGCCqGSM49
+AwEHoUQDQgAEUhXK0YBrrPIp+wUBWdbahoMOtM9SqNeiAZ3TFMywz4pDYs+tfpO9
+LpgHog9byFn9zpmklsx6tHuHpsDGYqkc4A==
+-----END EC PRIVATE KEY-----
 
 export KEYID=`cat adc_file.json | jq -r '.private_key_id'`
 export PROJECTID=`cat adc_file.json | jq -r '.project'`
 export CA_CERT_FILE=`cat adc_file.json | jq -r '.ca_cert_path'`
 export TOKEN_URI=`cat adc_file.json | jq -r '.token_uri'`
-export SERVCIE_NAME=`cat adc_file.json | jq -r '.name'`
+export SERVICE_NAME=`cat adc_file.json | jq -r '.name'`
+
+# note, replace the follwoing with the parsed url parts for your-org-1.zone1.google.gdch.test
+###  you can get the values from the  these from the TOKEN_URI,eg if
+#### TOKEN_URI is https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate
+#### then the STS_AUIDENCE is
+export STS_AUDIENCE="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test"
 ```
 
 Now start the software tpm
@@ -141,13 +166,33 @@ ODT8jpZZxmF74nuB5soHrcEfBAKaPCmLHv1zMAoHVfGqgYQ2gr8=
 
 so to get an access_token
 
+NOTE: Replace the parameters specified below with the ones derived for your environment from `adc_file.json`
+
 ```bash
 gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
-    --stsServerName=service-identity.<Domain> \
-    --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
-    --tokenURI=$TOKEN_URI \
+    --stsServerName=service-accounts.your-org-1.zone1.google.gdch.test --projectID=test2026 \
+    --svcAccountName=sa-test2026 --keyID=f1f360ef-dc96-4048-87a5-b063ef4f7da0 --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test" \
+    --tokenURI=https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate \
     --tpm-path="127.0.0.1:2321"
+```
+
+The output of this returns a bearer token
+
+```json
+{
+  "access_token": "STS-Bearer-ll-ZjjbsTKxG2dCEpp5GgJQ3ZP5F4xSSEQFPaz3fq8YGAwkui9Vw6kfw7ESLZ88Tshf7hDOsrgrozYJPHxJoLrJ6I_Fs2RtuDAAfEpemW4IWUCR-5TgP17JP0NE0CbRiLjF_uhIazu_e-20M5BEVwN3GiP7IgmFdrOGIIwQovi1mNMsAP6sfcIqz6pu1Sn2IODLYu--redacted",
+  "token_type": "Bearer",
+  "expires_in": 43198
+}
+```
+
+then export the `access_token` and invoke the api endpoint.  In this case, we're listing out the vms in namespace=`test2026`
+
+```bash
+export TOKEN=STS-Bearer-ll-ZjjbsTKxG2dCEpp5GgJQ3ZP5F4xSSEQFPaz3fq8YGAwkui9Vw6kfw7ESLZ88Tshf7hDOsrgrozYJPHxJoLrJ6I_Fs2RtuDAAfEpemW4IWUCR-5TgP17JP0NE0CbRiLjF_uhIazu_e-20M5BEVwN3GiP7IgmFdrOGIIwQovi1mNMsAP6sfcIqz6pu1Sn2IODLYu--redacted
+
+curl -v -H "Authorization: Bearer $TOKEN" "https://management-kube.apiserver.your-org-1.zone1.google.gdch.test/apis/virtualmachine.gdc.goog/v1/namespaces/test2026/virtualmachines?limit=500"
 ```
 
 #### Duplicate Key
@@ -181,14 +226,17 @@ tpmcopy --mode duplicate --keyType=ecc --secret=../certs/private_key.pem --eccSc
 tpmcopy --mode import --parentKeyType=rsa_ek --in=out.json --out=tpmkey.pem --tpm-path="127.0.0.1:2321"
 ```
 
-Now run the cli but remember to specify `-useEKParent=rsa_ek`
+Now run the cli but remember to specify `-useEKParent=rsa_ek`. 
+
+NOTE: Replace the parameters specified below with the ones derived for your environment from `adc_file.json`
 
 ```bash
 gdch-tpm-service-account \
     --keyfilepath=example/certs_duplicate/tpmkey.pem \
-    --stsServerName=service-identity.<Domain> \
-    --svcAccountName=$SERVCIE_NAME -keyID=$KEYID \
-    --tokenURI=$TOKEN_URI -keyPass=bar -useEKParent=rsa_ek \
+    --stsServerName=service-accounts.your-org-1.zone1.google.gdch.test --projectID=test2026 \
+    --svcAccountName=sa-test2026 --keyID=f1f360ef-dc96-4048-87a5-b063ef4f7da0 --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test" \
+    --tokenURI=https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate \
+    --keyPass=bar -useEKParent=rsa_ek \
     --tpm-path="127.0.0.1:2321"
 ```
 
@@ -213,12 +261,15 @@ tpm2_encodeobject -C primary.ctx -u key.pub -r key.priv -o workload1_tpm_key.pem
 
 now specify the passphrase when using the cli
 
+NOTE: Replace the parameters specified below with the ones derived for your environment from `adc_file.json`
+
 ```bash
 gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
-    --stsServerName=service-identity.<Domain> \
-    --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
-    --tokenURI=$TOKEN_URI -keyPass=bar \
+    --stsServerName=service-accounts.your-org-1.zone1.google.gdch.test --projectID=test2026 \
+    --svcAccountName=sa-test2026 --keyID=f1f360ef-dc96-4048-87a5-b063ef4f7da0 --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test" \
+    --tokenURI=https://service-accounts.your-org-1.zone1.google.gdch.test/authenticate \
+    --keyPass=bar \
     --tpm-path="127.0.0.1:2321"
 ```
 
@@ -255,8 +306,8 @@ After this, you will need to spcify the PCRs to check against while getting the 
 ```bash
 gdch-tpm-service-account  \
     --keyfilepath=example/certs_import/workload1_tpm_key.pem \
-    --stsServerName=service-identity.<Domain> \
-    --svcAccountName=$SERVCIE_NAME --keyID=$KEYID \
+    --stsServerName=service-identity.<Domain> --projectID=$PROJECTID \
+    --svcAccountName=$SERVICE_NAME --keyID=$KEYID \
     --tokenURI=$TOKEN_URI --pcrs=23:F5A5FD42D16A20302798EF6ED309979B43003D2320D9F0E8EA9831A92759FB4B \
     --tpm-path="127.0.0.1:2321"
 ```
@@ -336,14 +387,14 @@ swtpm socket --tpmstate dir=myvtpm --tpm2 --server type=tcp,port=2321 --ctrl typ
 ## for H2
 go run cmd/main.go  -caCertificate=example/certs/root-ca.crt  \
    --keyfilepath=example/certs_import/workload1_tpm_key.pem  \
-      --stsServerName=sts.domain.com   \
-        --svcAccountName=sa_name --keyID=1234  \
+      --stsServerName=sts.domain.com  --projectID=$PROJECTID  \
+        --svcAccountName=sa_name --keyID=1234 --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test  \
            --tokenURI="https://sts.domain.com:8081/authenticate"     --tpm-path="127.0.0.1:2321"
 
 ## for duplicated
 go run cmd/main.go  -caCertificate=example/certs/root-ca.crt  \
    --keyfilepath=example/certs_duplicate/tpmkey.pem     --stsServerName=sts.domain.com  \
-      --svcAccountName=sa_name -keyID=1234     \
+      --svcAccountName=sa_name -keyID=1234 --projectID=$PROJECTID  --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test   \
       --tokenURI="https://sts.domain.com:8081/authenticate" -keyPass=bar -useEKParent=rsa_ek  \
          --tpm-path="127.0.0.1:2321"
 ```
@@ -365,16 +416,15 @@ swtpm socket --tpmstate dir=myvtpm --tpm2 --server type=tcp,port=2321 --ctrl typ
 export TPM2TOOLS_TCTI="swtpm:port=2321"
 tpm2_flushcontext -t && tpm2_flushcontext -s && tpm2_flushcontext -l
 
-
 go run cmd/main.go   \
    --keyfilepath=example/certs_import/workload1_tpm_key.pem  \
       --stsServerName=stsgcdh-995081019036.us-central1.run.app   \
-        --svcAccountName=sa_name --keyID=1234  \
+        --svcAccountName=sa_name --keyID=1234 --projectID=core-eso --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test"  \
            --tokenURI="https://stsgcdh-995081019036.us-central1.run.app/authenticate"     --tpm-path="127.0.0.1:2321"
 
 go run cmd/main.go  \
    --keyfilepath=example/certs_duplicate/tpmkey.pem     --stsServerName=stsgcdh-995081019036.us-central1.run.app   \
-      --svcAccountName=sa_name -keyID=1234     \
+      --svcAccountName=sa_name -keyID=1234  --projectID=core-eso --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test"  \
       --tokenURI="https://stsgcdh-995081019036.us-central1.run.app/authenticate"  -keyPass=bar -useEKParent=rsa_ek  \
          --tpm-path="127.0.0.1:2321"
 ```
