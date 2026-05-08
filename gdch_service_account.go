@@ -438,7 +438,7 @@ func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
 				AccessToken: tokenString,
 			}),
 			SubjectTokenType:   "urn:k8s:params:oauth:token-type:serviceaccount",
-			RequestedTokenType: "urn:ietf:params:oauth:token-type:token-exchange",
+			RequestedTokenType: "urn:ietf:params:oauth:token-type:access_token",
 			HTTPClient:         stsClient,
 			PostJSON:           true,
 		},
