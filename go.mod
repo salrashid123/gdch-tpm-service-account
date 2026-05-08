@@ -7,7 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/go-tpm v0.9.5
 	github.com/salrashid123/golang-jwt-tpm v1.8.95
-	github.com/salrashid123/sts/http v0.0.0-20260508193740-e3e41a2e1b6a
+	github.com/salrashid123/sts/http v0.0.0-20260508224023-60953841ab01
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/oauth2 v0.36.0
 )

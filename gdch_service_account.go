@@ -445,6 +445,7 @@ func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
 			RequestedTokenType: "urn:ietf:params:oauth:token-type:access_token",
 			Audience:           cfg.STSAudience,
 			HTTPClient:         stsClient,
+			GrantType:          salsts.TypeTypeTokenExchange, // i don't know why we need this type here...it looks like a bug with the sts server implementation...
 			PostJSON:           true,
 		},
 	)
