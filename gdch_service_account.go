@@ -408,7 +408,7 @@ func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
 		IssuedAt:  &jwt.NumericDate{iat},
 		ExpiresAt: &jwt.NumericDate{exp},
 		Issuer:    fmt.Sprintf("system:serviceaccount:%s:%s", cfg.ProjectID, cfg.ServiceAccountName),
-		Audience:  []string{cfg.TokenURI},
+		Audience:  []string{"https://management-kube.apiserver.org-1.zone1.google.gdch.test"},
 		Subject:   fmt.Sprintf("system:serviceaccount:%s:%s", cfg.ProjectID, cfg.ServiceAccountName),
 	}
 
@@ -439,7 +439,7 @@ func NewGDCHTPMCredential(cfg *GDCHTPMConfig) (t *Token, e error) {
 			}),
 			SubjectTokenType:   "urn:k8s:params:oauth:token-type:serviceaccount",
 			RequestedTokenType: "urn:ietf:params:oauth:token-type:access_token",
-			Audience:           cfg.TokenURI,
+			Audience:           "https://management-kube.apiserver.org-1.zone1.google.gdch.test", //cfg.TokenURI,
 			HTTPClient:         stsClient,
 			PostJSON:           true,
 		},
