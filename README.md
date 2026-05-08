@@ -12,7 +12,7 @@ Normally, when you create a service account credential for `gcdh`, the `privae_k
   "format_version": "1",
   "project": "project_name",
   "private_key_id": "abcdef1234567890",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nETC\n-----END PRIVATE KEY-----\n",
+  "private_key": "----BEGIN EC PRIVATE KEY-----\nETC\n-----END EC PRIVATE KEY-----\n",
   "name": "sa_name",
   "ca_cert_path": "/path/to/root-ca.crt",
   "token_uri": "https://service-identity.<Domain>/authenticate",

@@ -422,6 +422,7 @@ func TestKeyFileH2Credentials(t *testing.T) {
 		ProjectID:          "testproject",
 		TokenURI:           STSURL,
 		KeyID:              "1234",
+		STSAudience:        "https://management-kube.apiserver.your-org-1.zone1.google.gdch.test",
 
 		Parentpass:  "",
 		Keypass:     "",
@@ -465,6 +466,7 @@ func TestKeyFileEKRSACredentials(t *testing.T) {
 		ProjectID:          "testproject",
 		TokenURI:           STSURL,
 		KeyID:              "1234",
+		STSAudience:        "https://management-kube.apiserver.your-org-1.zone1.google.gdch.test",
 
 		Parentpass:  "",
 		Keypass:     "",
@@ -508,6 +510,7 @@ func TestKeyFileEKECCCredentials(t *testing.T) {
 		ProjectID:          "testproject",
 		TokenURI:           STSURL,
 		KeyID:              "1234",
+		STSAudience:        "https://management-kube.apiserver.your-org-1.zone1.google.gdch.test",
 
 		Parentpass:  "",
 		Keypass:     "",
