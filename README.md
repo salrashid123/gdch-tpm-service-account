@@ -54,7 +54,18 @@ You can set the following options on usage:
 | **`--pcrs`** | "PCR Bound slot:value (increasing order, comma separated)" |
 | **`--rawOutput`** |  Return just the token, nothing else |
 | **`--useEKParent`** | Use endorsement keys (`rsa_ek` or `ecc_ek` as parent (default: `h2`) |
+| **`--kubeOutput`** | Output kubectl compliant JSON credentials (default: `false`) |
 | **`--tpm-session-encrypt-with-name`** | hex encoded TPM object 'name' to use with an encrypted session |
+
+---
+
+### Build
+
+You can build the binary directly with go or download from the `Releases` page.
+
+```bash
+go build -o gdch-tpm-service-account cmd/main.go
+```
 
 ---
 
@@ -356,9 +367,96 @@ c) Invoke custom process credential authentication library (see [reference](http
 
 #### Kubernetes
 
+You can also configure the the cli to output JSON which acts as a credential provider for `kubectl` by setting the `--kubeOutput` flag.
+
+for example:
+
+```bash
+/path/to/gdch-tpm-service-account --keyfilepath=/path/to/gdch-tpm-service-account/example/certs_import/workload1_tpm_key.pem  \
+      --stsServerName=stsgcdh-995081019036.us-central1.run.app   \
+        --svcAccountName=sa_name --keyID=1234 --projectID=core-eso --stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test"  \
+           --tokenURI="https://stsgcdh-995081019036.us-central1.run.app/authenticate"     --tpm-path="127.0.0.1:2321" --kubeOutput
+```
+
+returns
+
+```json
+{
+  "kind": "ExecCredential",
+  "apiVersion": "client.authentication.k8s.io/v1",
+  "status": {
+    "expirationtimestamp": 1778447388,
+    "token": "fake_access_token"
+  }
+}
+```
+
+ofcours this uses the sample STS server running on cloud run (a real gdch will return a live token)
+
+
+As a demo with the _sample STS server on cloud run and `minikube`_
+```bash
+cd example/kubectl/
+# $ cat token.csv 
+#   # token,user,uid,"group1,group2"
+#   fake_access_token,admin-user,1001,"system:masters"
+#   other_token,dev-user,1002
+
+mkdir -p ~/.minikube/files/etc/ca-certificates/
+cp token.csv ~/.minikube/files/etc/ca-certificates/token.csv
+minikube start \
+  --extra-config=apiserver.token-auth-file=/etc/ca-certificates/token.csv
+
+## now configure the kubectl config to use the TPM provider here
+kubectl config set-credentials tpm-sa \
+  --exec-command=/path/to/gdch-tpm-service-account \
+  --exec-interactive-mode=Always \
+  --exec-api-version=client.authentication.k8s.io/v1 \
+  --exec-arg=--keyfilepath=/path/to/example/certs_import/workload1_tpm_key.pem  \
+  --exec-arg=--stsServerName=stsgcdh-995081019036.us-central1.run.app   \
+  --exec-arg=--svcAccountName=sa_name \
+  --exec-arg=--keyID=1234 \
+  --exec-arg=--projectID=core-eso \
+  --exec-arg=--stsAudience="https://management-kube.apiserver.your-org-1.zone1.google.gdch.test"  \
+  --exec-arg=--tokenURI="https://stsgcdh-995081019036.us-central1.run.app/authenticate" \
+  --exec-arg=--tpm-path="127.0.0.1:2321" \
+  --exec-arg=--kubeOutput
+
+## set the config and invoke the apis
+kubectl config set-context tpm-sa-context --cluster=minikube --user=tpm-sa --namespace=default
+
+cat $HOME/.kube/config 
+
+kubectl config use-context tpm-sa-context
+
+kubectl get no
+
+### to debug, set
+# export GODEBUG=http2debug=2
+# export GRPC_GO_LOG_SEVERITY_LEVEL=info
+# export GRPC_GO_LOG_VERBOSITY_LEVEL=99
+# export TPM2TOOLS_TCTI="swtpm:port=2321"
+# tpm2_flushcontext -t
+
+
+## to delete the config
+# kubectl config use-context  minikube
+#kubectl config delete-user tpm-sa
+# kubectl config delete-context tpm-sa-context
+```
+
+Note, you can also specify the *raw* token inline with kubernetes:
+
+```bash
+export TOKEN="STS-Bearer-ll-ZjjbsTKxG2dCEpp5GgJQ3ZP5F4xSSEQFPaz3fq8YGAwkui9Vw6kfw7ESLZ88Tshf7hDOsrgrozYJPHxJoLrJ6I_Fs2RtuDAAfEpemW4IWUCR-5TgP17JP0NE0CbRiLjF_uhIazu_e-20M5BEVwN3GiP7IgmFdrOGIIwQovi1mNMsAP6sfcIqz6pu1Sn2IODLYu--redacted"
+kubectl get pods --token=$TOKEN
+```
+
+
 - [Kubernetes Certificate Auth using Trusted Platform Module (TPM) keys](https://github.com/salrashid123/kubernetes_tpm_client)
 - [Kubernetes Trusted Platform Module (TPM) DaemonSet](https://github.com/salrashid123/tpm_daemonset)
 - [Kubernetes Trusted Platform Module (TPM) using Device Plugin and Gatekeeper](https://github.com/salrashid123/tpm_kubernetes)
+
 
 ---
 

@@ -1,0 +1,3 @@
+# token,user,uid,"group1,group2"
+fake_access_token,admin-user,1001,"system:masters"
+other_token,dev-user,1002

@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"slices"
+	"time"
 
 	"github.com/google/go-tpm/tpmutil"
 	gdchtpm "github.com/salrashid123/gdch-tpm-service-account"
@@ -38,7 +39,8 @@ var (
 	tokenURI       = flag.String("tokenURI", "", "STSServer URI (default: )")
 	stsAudience    = flag.String("stsAudience", "", "Audience for the STS request")
 
-	rawOutput = flag.Bool("rawOutput", false, "return just the token, nothing else")
+	rawOutput  = flag.Bool("rawOutput", false, "return just the token, nothing else")
+	kubeOutput = flag.Bool("kubeOutput", false, "return json formatted in a way kubectl expects")
 
 	sessionEncryptionName = flag.String("tpm-session-encrypt-with-name", "", "hex encoded TPM object 'name' to use with an encrypted session")
 	version               = flag.Bool("version", false, "print version")
@@ -136,6 +138,44 @@ func run() int {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "gdch-tpm-credential: Error getting credentials %v", err)
 		return 1
+	}
+
+	if *kubeOutput {
+		exp := time.Now().Add(time.Second * time.Duration(resp.ExpiresIn))
+
+		// can't use the json struct here...it seems the names are captialized and the apis case sensitive
+		// e := &k8sclient.ExecCredential{
+		// 	TypeMeta: metav1.TypeMeta{
+		// 		APIVersion: "client.authentication.k8s.io/v1",
+		// 		Kind:       "ExecCredential",
+		// 	},
+		// 	Status: &k8sclient.ExecCredentialStatus{
+		// 		ExpirationTimestamp: &v1.Time{
+		// 			exp,
+		// 		},
+		// 		Token: resp.AccessToken,
+		// 	},
+		// }
+		// m, err := json.Marshal(e)
+		// if err != nil {
+		// 	fmt.Fprintf(os.Stderr, "gdch-tpm-credential: Error marshalling processCredential output %v", err)
+		// 	return 1
+		// }
+
+		// which means we manually construct the json response instead
+		m := fmt.Sprintf(`
+			{
+			\"kind\": \"ExecCredential\",
+			\"apiVersion\": \"client.authentication.k8s.io/v1\", 
+			\"status\": 
+				{ 
+				\"expirationtimestamp\": %d, 
+			  	\"token\": \"%s\"
+				}
+			}`, exp.Unix(), resp.AccessToken)
+
+		fmt.Println(string(m))
+		return 0
 	}
 
 	if *rawOutput {
